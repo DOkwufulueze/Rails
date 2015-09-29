@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
+    @time_of_display = Time.now.to_formatted_s(:long)
     @products = Product.all
   end
 

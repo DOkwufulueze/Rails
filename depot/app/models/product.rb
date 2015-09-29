@@ -10,4 +10,8 @@ class Product < ActiveRecord::Base
     minimum: 10,
     message: ':::Title should be 10 or more characters long'
   }
+
+  def self.latest
+    Product.order(:updated_at).last
+  end
 end

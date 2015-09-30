@@ -10,4 +10,9 @@ class StoreControllerTest < ActionController::TestCase
     assert_select '.price', /=N=[,\d]+\.\d\d/
   end
 
+  test "Should confirm session[:counter]'s existence" do
+    get :index
+    assert session[:counter].nil? == false, ':::The counter session is not nil'
+  end
+
 end

@@ -29,12 +29,12 @@ class LineItemsController < ApplicationController
   # POST /line_items.json
   def create
     product = Product.find(params[:product_id])
-    @line_item = @cart.add_product(product.id)
+    @line_item = @cart.add_product(product.id, product.price)
 
     respond_to do |format|
       if @line_item.save
         session[:counter] = 0
-        format.html { redirect_to @line_item.cart }
+        format.html { redirect_to store_url }
         format.json { render :action => :show, :status => :created, :location => @line_item }
       else
         format.html { render :action => :new }
@@ -60,9 +60,15 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.json
   def destroy
+    message = "#{@line_item.product.title} Was successfully removed from your Cart"
     @line_item.destroy
     respond_to do |format|
-      format.html { redirect_to line_items_url, notice: 'Line item was successfully destroyed.' }
+      if @line_item.cart.line_items.length > 0
+        format.html { redirect_to store_url, :notice => message }
+      else
+        format.html { redirect_to store_url, :notice => "#{message}. Your Cart is now Empty." }
+      end
+
       format.json { head :no_content }
     end
   end

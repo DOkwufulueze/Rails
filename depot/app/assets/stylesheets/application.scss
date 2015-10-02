@@ -48,12 +48,35 @@
   #side {
     float: left;
     padding: 1em 2em;
-    width: 13em;
+    width: 13.3em;
     background: #141;
     
     p {
       color: #bababa;
       font-size: 0.8em;
+    }
+
+    form, div {
+      display: inline;
+    }  
+ 
+    input {
+      font-size: small;
+    }
+
+    #cart {
+      font-size: 0.5em;
+      color:     white;
+
+      table {
+        border-top:    1px dotted #595;
+        border-bottom: 1px dotted #595;
+        margin-bottom: 10px;
+
+        .bordered-top {
+          border-top: 1px solid #bababa;
+        }
+      }
     }
 
     ul {

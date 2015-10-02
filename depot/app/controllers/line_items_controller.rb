@@ -35,7 +35,7 @@ class LineItemsController < ApplicationController
       if @line_item.save
         session[:counter] = 0
         format.html { redirect_to store_url }
-        format.js
+        format.js { @current_item = @line_item }
         format.json { render :action => :show, :status => :created, :location => @line_item }
       else
         format.html { render :action => :new }
@@ -61,16 +61,24 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1
   # DELETE /line_items/1.json
   def destroy
-    message = "#{@line_item.product.title} Was successfully removed from your Cart"
-    @line_item.destroy
-    respond_to do |format|
-      if @line_item.cart.line_items.length > 0
-        format.html { redirect_to store_url, :notice => message }
-      else
-        format.html { redirect_to store_url, :notice => "#{message}. Your Cart is now Empty." }
-      end
+    if @line_item.cart
+      message = @line_item.product.title ? "#{@line_item.product.title} Was successfully removed from your Cart" : ""
+      @line_item.destroy
+      respond_to do |format|
+        if @line_item.cart.line_items.length > 0
+          format.html { redirect_to store_url, :notice => message }
+        else
+          format.html { redirect_to store_url, :notice => "#{message}Your Cart is now Empty." }
+        end
 
-      format.json { head :no_content }
+        format.json { head :no_content }
+      end
+    else
+      @line_item.destroy
+      respond_to do |format|
+        format.html { redirect_to store_url, :notice => ":::Item successfully deleted." }
+        format.json { head :no_content }
+      end
     end
   end
 

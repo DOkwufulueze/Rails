@@ -11,3 +11,9 @@ two:
   cart_id: 1
   quantity: 1
   price: 20.00
+
+three:
+  product_id: 4
+  cart_id: 1
+  quantity: 1
+  price: 20.00

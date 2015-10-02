@@ -1,0 +1,21 @@
+<% if line_item == @current_item %>
+<tr id="current_item">
+<% else %>
+<tr>
+<% end %>
+  <% @product_title = line_item.product.title %>
+  <td><%= line_item.quantity %>&times;</td>
+  <td><%= line_item.product.title %></td>
+  <td class="item_price"><%= number_to_currency(line_item.total_price, :unit => "=N=") %></td>
+</tr>
+
+<tr>
+  <td colspan="3"> <%= button_to 'Delete Item', line_item, :method => :delete, :data => { :confirm => ":::Do you really want to delete '#{@product_title}'?" } %> </td>
+</tr>
+<tr> <td colspan="3"></td> </tr>
+<tr> <td colspan="3"></td> </tr>
+<tr> <td colspan="3"></td> </tr>
+<tr> <td colspan="3"></td> </tr>
+<tr> <td colspan="3"></td> </tr>
+<tr> <td colspan="3"></td> </tr>
+

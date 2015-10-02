@@ -35,6 +35,7 @@ class LineItemsController < ApplicationController
       if @line_item.save
         session[:counter] = 0
         format.html { redirect_to store_url }
+        format.js
         format.json { render :action => :show, :status => :created, :location => @line_item }
       else
         format.html { render :action => :new }
@@ -84,3 +85,4 @@ class LineItemsController < ApplicationController
       params.require(:line_item).permit(:product_id)
     end
 end
+

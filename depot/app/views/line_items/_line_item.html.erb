@@ -13,8 +13,8 @@
 </tr>
 
 <tr>
-  <td> <%= button_to 'Delete Item', line_item, :method => :delete, :data => { :confirm => ":::Do you really want to delete '#{@product_title}'?" }, :remote => true %> </td>
-  <td><%= button_to 'Decrement Item', line_item, :method => :patch, :data => { :confirm => ":::Do you really want to decrement '#{@product_title}'?" }, :remote => true %></td>
+  <td> <%= button_to 'Delete Item', line_item, :method => :delete, :remote => true, :data => { :confirm => ":::Do you really want to delete '#{@product_title}'?" } %> </td>
+  <td><%= button_to 'Decrement Item', { :controller => :line_items, :action => :decrement_line_item, :id => line_item.id }, :method => :get, :remote => true, :data => { :confirm => ":::Do you really want to decrement '#{@product_title}'?" } %></td>
 </tr>
 <tr> <td colspan="2"></td> </tr>
 <tr> <td colspan="2"></td> </tr>

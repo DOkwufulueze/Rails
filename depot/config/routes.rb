@@ -1,11 +1,12 @@
-Rails.application.routes.draw do
-  
+Rails.application.routes.draw do  
+  get 'line_items/decrement_line_item/:id' => 'line_items#decrement_line_item'
   root 'store#index', :as => 'store'
   
   resources :products
   resources :store
   resources :carts
   resources :line_items
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

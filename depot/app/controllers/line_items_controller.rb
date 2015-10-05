@@ -2,7 +2,7 @@ class LineItemsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:create]
 
-  before_action :set_line_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_line_item, only: [:show, :edit, :update, :destroy, :decrement_line_item]
 
   # GET /line_items
   # GET /line_items.json
@@ -47,19 +47,14 @@ class LineItemsController < ApplicationController
   # PATCH/PUT /line_items/1
   # PATCH/PUT /line_items/1.json
   def update
-    new_quantity = @line_item.decrement
-    if new_quantity == 0
-      destroy
-    else
-      respond_to do |format|
-        if @line_item.update(:quantity => new_quantity)
-          format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully decremented." }
-          format.js {}
-          format.json { render :show, status: :ok, location: @line_item }
-        else
-          format.html { render :edit }
-          format.json { render json: @line_item.errors, status: :unprocessable_entity }
-        end
+    respond_to do |format|
+      if @line_item.update(line_item_params)
+        format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully Updated." }
+        format.js {}
+        format.json { render :show, status: :ok, location: @line_item }
+      else
+        format.html { render :edit }
+        format.json { render json: @line_item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -72,12 +67,7 @@ class LineItemsController < ApplicationController
       @line_item.destroy
       update_cart
       respond_to do |format|
-        # if @line_item.cart.line_items.length > 0
-        #   format.html { redirect_to store_url, :notice => message }
-        # else
-        #   format.html { redirect_to store_url, :notice => "#{message}Your Cart is now Empty." }
-        # end
-
+        format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully deleted." }
         format.js {}
         format.json { head :no_content }
       end
@@ -97,6 +87,24 @@ class LineItemsController < ApplicationController
       cart_object.destroy
     end
     
+  end
+
+  def decrement_line_item
+    @line_item.quantity, new_quantity = @line_item.quantity - 1, @line_item.quantity - 1
+    if new_quantity == 0
+      destroy
+    else
+      respond_to do |format|
+        if @line_item.update(:quantity => new_quantity)
+          format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully decremented." }
+          format.js {}
+          format.json { render :show, status: :ok, location: @line_item }
+        else
+          format.html { render :edit }
+          format.json { render json: @line_item.errors, status: :unprocessable_entity }
+        end
+      end
+    end
   end
 
   private

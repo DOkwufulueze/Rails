@@ -1,0 +1,6 @@
+$('#cart').html("<%= escape_javascript render(@line_item.cart) %>");
+
+if ($('#cart .item_price').length == 0) {
+  $('#cart').hide('blind', 1000);
+}
+

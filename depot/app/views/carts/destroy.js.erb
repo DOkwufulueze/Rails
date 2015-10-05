@@ -1,7 +1,11 @@
 $cart = $('#cart');
-$cart.html("<%= escape_javascript render(@cart) %>");
+$notice = $('#notice');
+
+$cart.html("<%= escape_javascript render @cart %>");
 $cart.hide('blind', 1000);
 
+$notice.html('<%= escape_javascript render :text => ":::Your Cart is now Empty." %>')
+$notice.show('blind', 1000);
 
 
 

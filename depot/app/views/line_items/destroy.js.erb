@@ -1,7 +1,15 @@
-$('#cart').html("<%= escape_javascript render(@line_item.cart) %>");
+$cart = $('#cart');
+$notice = $('#notice');
+
+$cart.html("<%= escape_javascript render @line_item.cart %>");
 
 if ($('#cart .item_price').length == 0) {
-  $('#cart').hide('blind', 1000);
+  $cart.hide('blind', 1000);
+  $notice.html('<%= escape_javascript render :text => ":::Line item '#{@line_item.product.title}' was successfully deleted from your Cart. Your Cart is now Empty." %>')
+} else {
+  $notice.html('<%= escape_javascript render :text => ":::Line item '#{@line_item.product.title}' was successfully deleted." %>')
 }
+
+$notice.show('blind', 1000);
 
 

@@ -1,10 +1,17 @@
-console.log($('#cart .item_price').length);
-if ($('#cart .item_price').length == 0) {
-  $('#cart').show('blind', 1000);
-}
+$cart = $('#cart');
+$notice = $('#notice');
 
-$('#cart').html("<%= escape_javascript render(@cart) %>");
+$cart.html("<%= escape_javascript render @cart %>");
+
+<% if @line_item.cart.line_items.length == 1 && @line_item.quantity == 1 %>
+  $cart.show('blind', 1000);
+<% end %>
+
+$notice.html('<%= escape_javascript render :text => ":::'#{@line_item.product.title}' was successfully added to your Cart." %>')
+$notice.show('blind', 1000);
 
 $('#current_item').css({'background-color': '#88ff88'})
                   .animate({'background-color': '#114411'}, 1000);
+
+
 

@@ -34,9 +34,9 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       if @line_item.save
         session[:counter] = 0
-        # format.html { redirect_to store_url }
+        format.html { redirect_to store_url }
         format.js { @current_item = @line_item }
-        # format.json { render :action => :show, :status => :created, :location => @line_item }
+        format.json { render :action => :show, :status => :created, :location => @line_item }
       else
         format.html { render :action => :new }
         format.json { render :json => @line_item.errors, :status => :unprocessable_entity }
@@ -49,7 +49,7 @@ class LineItemsController < ApplicationController
   def update
     respond_to do |format|
       if @line_item.update(line_item_params)
-        format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully Updated." }
+        format.html { redirect_to store_url, notice: "Line item was successfully Updated." }
         format.js {}
         format.json { render :show, status: :ok, location: @line_item }
       else
@@ -115,8 +115,8 @@ class LineItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def line_item_params
-      # params.require(:line_item).permit(:product_id)
-      params[:line_item]
+      params.require(:line_item).permit(:product_id)
+      # params[:line_item]
     end
 end
 

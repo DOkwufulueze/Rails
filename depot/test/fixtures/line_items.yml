@@ -5,15 +5,18 @@ one:
   cart_id: 1
   quantity: 1
   price: 20.00
+  order_id: 1
 
 two:
   product_id: 2
   cart_id: 1
   quantity: 1
   price: 20.00
+  order_id: 2
 
 three:
   product_id: 4
   cart_id: 1
   quantity: 1
   price: 20.00
+  order_id: 1

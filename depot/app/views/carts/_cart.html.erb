@@ -6,6 +6,7 @@
     <td class="total_cell"><%= number_to_currency(cart.total_price, :unit => "=N=") %></td>
   </tr>
 </table>
+<%= button_to 'Checkout', { :controller => :orders, :action => :new }, :method => :get %>
 <%= button_to 'Empty Cart', cart, :method => :delete, :data => { :confirm => ':::Are you sure you want to empty Cart?' }, :remote => true %>
 
 

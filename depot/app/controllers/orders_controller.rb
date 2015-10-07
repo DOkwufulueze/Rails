@@ -40,7 +40,7 @@ class OrdersController < ApplicationController
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
 
-        format.html { redirect_to store_url, notice: ':::Your Order was successfully placed. Thanks.' }
+        format.html { redirect_to orders_url, notice: ':::Your Order was successfully placed. Thanks.' }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -54,7 +54,7 @@ class OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        format.html { redirect_to orders_url, notice: 'Order was successfully updated.' }
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit }

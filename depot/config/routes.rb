@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   resources :carts
   resources :line_items
   resources :orders
+
+  resources :products do
+    get :who_bought, :on => :member, :defaults => { :format => 'html' }
+  end
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

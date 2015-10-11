@@ -21,5 +21,11 @@ class OrderNotifier < ApplicationMailer
 
     mail :to => order.email, :subject => 'Pragmatic Store Order Shipped'
   end
+
+  def ship_date_updated(order)
+    @order = order
+
+    mail :to => order.email, :subject => 'Ship Date Changed'
+  end
 end
 

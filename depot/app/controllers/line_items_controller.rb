@@ -1,4 +1,6 @@
 class LineItemsController < ApplicationController
+  skip_before_action :authorize, :only => :create
+
   include CurrentCart
   before_action :set_cart, only: [:create]
 
@@ -63,11 +65,11 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1.json
   def destroy
     if @line_item.cart
-      message = @line_item.product.title ? "#{@line_item.product.title} Was successfully removed from your Cart" : ""
+      message = @line_item.product.try(:title) ? "#{@line_item.product.try(:title)} Was successfully removed from your Cart" : ""
       @line_item.destroy
       update_cart
       respond_to do |format|
-        format.html { redirect_to store_url, notice: "Line item #{@line_item.product.title} was successfully deleted." }
+        format.html { redirect_to store_url, notice: "Line item #{@line_item.product.try(:title)} was successfully deleted." }
         format.js {}
         format.json { head :no_content }
       end
@@ -79,6 +81,15 @@ class LineItemsController < ApplicationController
         format.json { head :no_content }
       end
     end
+
+    # message = @line_item.product.try(:title) ? "#{@line_item.product.try(:title)} Was successfully removed from your Cart" : ""
+    # @line_item.destroy
+    # update_cart
+    # respond_to do |format|
+    #   format.html { redirect_to store_url, notice: "Line item #{@line_item.product.try(:title)} was successfully deleted." }
+    #   format.js {}
+    #   format.json { head :no_content }
+    # end
   end
 
   def update_cart

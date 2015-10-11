@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class UserStoriesTest < ActionDispatch::IntegrationTest
-  fixtures :products
+  fixtures :products, :carts, :line_items, :orders
   # A user goes to the index page. They select a product, adding it to their
   # cart, and check out, filling in their details on the checkout form. When
   # they submit, an order is created containing their information, along with a
@@ -10,7 +10,8 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
   test "buying a product" do
     LineItem.delete_all
     Order.delete_all
-    ruby_book = products(:ruby)
+    ruby_book = products(:one)
+    
     get "/"
     assert_response :success
     assert_template "index"
@@ -26,25 +27,28 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template "new"
     
-    post_via_redirect "/orders",
-                      order: { name:     "Daniel",
-                               address:  "Ojo",
-                               email:    "daniel.okwufulueze@gmail.com",
-                               pay_type: "Check" }
+    post_via_redirect "/orders", order: { :name =>     "Daniel",
+                              :address =>  "Ojo",
+                              :email =>    "daniel.okwufulueze@gmail.com",
+                              :pay_type => "Check" }
     assert_response :success
     assert_template "index"
     cart = Cart.find(session[:cart_id])
-    assert_equal 0, cart.line_items.size
+    # assert_nil(session[:cart_id])
     
     orders = Order.all
     assert_equal 1, orders.size
     order = orders[0]
+
+    # order = orders(:use)
+    assert_equal [nil], order.line_items.pluck(:cart_id)
     
     assert_equal "Daniel",      order.name
     assert_equal "Ojo",   order.address
     assert_equal "daniel.okwufulueze@gmail.com", order.email
     assert_equal "Check",            order.pay_type
-    
+    assert_equal "2015-10-22 00:00:00 UTC", order.ship_date.to_s
+
     assert_equal 1, order.line_items.size
     line_item = order.line_items[0]
     assert_equal ruby_book, line_item.product
@@ -54,4 +58,9 @@ class UserStoriesTest < ActionDispatch::IntegrationTest
     assert_equal 'daniel@dealdey.com', mail[:from].value
     assert_equal "Pragmatic Store Order Confirmation", mail.subject
   end
+
+  # test "record not found" do
+  #   assert_rescue_from ActiveRecord::RecordNotFound, with: :send_failure_mail
+  #   product = Product.find(:nonexistent)
+  # end
 end

@@ -1,15 +1,37 @@
 Rails.application.routes.draw do  
-  get 'line_items/decrement_line_item/:id' => 'line_items#decrement_line_item'
-  root 'store#index', :as => 'store'
-  
-  resources :products
-  resources :store
-  resources :carts
-  resources :line_items
-  resources :orders
+  get 'admin' => 'admin#index'
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+  end
+
+  # get 'admin/index'
+
+  # get 'sessions/new'
+
+  get 'sessions/create'
+  get 'sessions/destroy'
+
+  # resources :products
+  # resources :store
+  resources :users
+
+  get "store/index"
+  post ':locale' => 'store#index'
+
 
   resources :products do
     get :who_bought, :on => :member, :defaults => { :format => 'html' }
+  end
+
+  scope '(:locale)' do
+    resources :orders
+    resources :line_items
+    resources :carts
+    get 'line_items/decrement_line_item/:id' => 'line_items#decrement_line_item'
+
+    root 'store#index', :as => 'store'
   end
   
   # The priority is based upon order of creation: first created -> highest priority.
@@ -67,3 +89,5 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 end
+
+

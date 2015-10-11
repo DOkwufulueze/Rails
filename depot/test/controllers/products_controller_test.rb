@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProductsControllerTest < ActionController::TestCase
   setup do
-    @product = products(:one)
+    @product = products(:use)
     @update = {
       title:       'Lorem Ipsum',
       description: 'Wibbles are fun!',
@@ -41,13 +41,13 @@ class ProductsControllerTest < ActionController::TestCase
   end
 
   test "should update product" do
-    patch :update, id: @product, product: @update
+    patch :update, :id => @product, :product => @update
     assert_redirected_to product_path(assigns(:product))
   end
 
   test "should destroy product" do
     assert_difference('Product.count', -1) do
-      delete :destroy, id: @product
+      delete :destroy, :id => @product
     end
 
     assert_redirected_to products_path

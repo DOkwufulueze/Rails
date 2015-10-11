@@ -5,7 +5,11 @@ class ProductsController < ApplicationController
   # GET /products.json
   def index
     @time_of_display = Time.now.to_formatted_s(:long)
-    @products = Product.all
+    if @locale
+      @products = Product.where(:locale => @locale).to_a
+    else
+      @products = Product.all
+    end
   end
 
   # GET /products/1
@@ -83,7 +87,7 @@ class ProductsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
-      params.require(:product).permit(:title, :description, :image_url, :price)
+      params.require(:product).permit(:title, :description, :image_url, :price, :locale)
     end
 end
 

@@ -3,19 +3,21 @@
 <% else %>
 <tr>
 <% end %>
-  <% @product_title = line_item.product.title %>
+  <% @product_title = line_item.product.try(:title) %>
   <td><%= line_item.quantity %>&times;</td>
-  <td> <%= line_item.product.title %></td>
+  <td> <%= line_item.product.try(:title) %></td>
 </tr>
 <tr>
   <td>Price: </td>
   <td class="item_price"><%= number_to_currency(line_item.total_price, :unit => "=N=") %></td>
 </tr>
 
-<tr>
-  <td> <%= button_to 'Delete Item', line_item, :method => :delete, :remote => true, :data => { :confirm => ":::Do you really want to delete '#{@product_title}'?" } %> </td>
-  <td><%= button_to 'Decrement Item', { :controller => :line_items, :action => :decrement_line_item, :id => line_item.id }, :method => :get, :remote => true, :data => { :confirm => ":::Do you really want to decrement '#{@product_title}'?" } %></td>
-</tr>
+<% if @order.nil? %>
+  <tr>
+    <td> <%= button_to t('.delete_line_item'), line_item, :method => :delete, :remote => true, :data => { :confirm => ":::Do you really want to delete '#{@product_title}'?" } %> </td>
+    <td><%= button_to t('.decrement_line_item'), { :controller => :line_items, :action => :decrement_line_item, :id => line_item.id }, :method => :get, :remote => true, :data => { :confirm => ":::Do you really want to decrement '#{@product_title}'?" } %></td>
+  </tr>
+<% end %>
 <tr> <td colspan="2"></td> </tr>
 <tr> <td colspan="2"></td> </tr>
 <tr> <td colspan="2"></td> </tr>

@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  skip_before_action :authorize, :only => [:new, :create]
+
   include CurrentCart
   before_action :set_cart, :only => [:new, :create]
 
@@ -34,13 +36,14 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     @order.add_line_items_from_cart(@cart)
+    @order.ship_date = '22-10-2015'
 
     respond_to do |format|
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
-        OrderNotifier.received(@order).deliver
-        format.html { redirect_to orders_url, notice: ':::Your Order was successfully placed. Thanks.' }
+        OrderNotifier.received(@order).deliver_now
+        format.html { redirect_to store_url, notice: I18n.t('.thanks') }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -53,8 +56,10 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     respond_to do |format|
+      ship_date = @order.ship_date
       if @order.update(order_params)
-        format.html { redirect_to orders_url, notice: 'Order was successfully updated.' }
+        OrderNotifier.ship_date_updated(@order).deliver_now unless @order.ship_date == ship_date
+        format.html { redirect_to orders_url, notice: "Order was successfully updated." }
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit }
@@ -81,6 +86,6 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:name, :address, :email, :pay_type)
+      params.require(:order).permit(:name, :address, :email, :pay_type, :ship_date)
     end
 end

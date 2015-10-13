@@ -50,5 +50,8 @@ test:
 production:
   <<: *default
   database: depot_production
-  username: depot
+  username: root
   password: <%= ENV['DEPOT_DATABASE_PASSWORD'] %>
+  reconnect: false
+  host: localhost
+

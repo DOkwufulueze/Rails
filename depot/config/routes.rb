@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     resources :carts
     get 'line_items/decrement_line_item/:id' => 'line_items#decrement_line_item'
 
+    post 'line_items/:product_id' => 'line_items#create'
+
     root 'store#index', :as => 'store'
   end
   

@@ -1,10 +1,10 @@
 class LineItemsController < ApplicationController
-  skip_before_action :authorize, :only => :create
+  skip_before_action :authorize, :only => [:create]
 
   include CurrentCart
-  before_action :set_cart, only: [:create]
+  before_action :set_cart, :only => [:set_line_item, :create]
 
-  before_action :set_line_item, only: [:show, :edit, :update, :destroy, :decrement_line_item]
+  before_action :set_line_item, :only => [:show, :edit, :update, :destroy, :decrement_line_item]
 
   # GET /line_items
   # GET /line_items.json
@@ -32,7 +32,6 @@ class LineItemsController < ApplicationController
   def create
     product = Product.find(params[:product_id])
     @line_item = @cart.add_product(product.id, product.price)
-
     respond_to do |format|
       if @line_item.save
         session[:counter] = 0
@@ -81,15 +80,6 @@ class LineItemsController < ApplicationController
         format.json { head :no_content }
       end
     end
-
-    # message = @line_item.product.try(:title) ? "#{@line_item.product.try(:title)} Was successfully removed from your Cart" : ""
-    # @line_item.destroy
-    # update_cart
-    # respond_to do |format|
-    #   format.html { redirect_to store_url, notice: "Line item #{@line_item.product.try(:title)} was successfully deleted." }
-    #   format.js {}
-    #   format.json { head :no_content }
-    # end
   end
 
   def update_cart
